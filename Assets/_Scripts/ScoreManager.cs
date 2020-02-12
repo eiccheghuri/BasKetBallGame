@@ -30,6 +30,20 @@ public class ScoreManager : MonoBehaviour
     [SerializeField]
     private int _scoreToIncrease=1;
 
+    [SerializeField]
+    private TextMeshProUGUI _ballMissText;
+
+    [SerializeField]
+    private TextMeshProUGUI _finalScoreText;
+
+    
+    private int _ballRemaining = 3;
+
+    private UiManager _uimanager;
+
+    [HideInInspector]
+    public bool ScoreTriggered;
+
 
 
 
@@ -37,6 +51,8 @@ public class ScoreManager : MonoBehaviour
     private void Start()
     {
         _scoreText.text = "Score: " + _score;
+        _ballMissText.text = "Ball: " + _ballRemaining;
+        _uimanager = FindObjectOfType<UiManager>();
     }
 
 
@@ -46,6 +62,28 @@ public class ScoreManager : MonoBehaviour
         _scoreText.text = "Score: " + _score;
 
     }
+
+    public void CountingMissingBall()
+    {
+       
+
+        if(ScoreTriggered==false)
+        {
+            _ballRemaining--;
+            _ballMissText.text = "Ball: " + _ballRemaining;
+
+            if(_ballRemaining<=0)
+            {
+                _uimanager.GameOver();
+                _finalScoreText.text = "SCORE: " + _score;
+            }
+            
+            
+
+        }
+        ScoreTriggered = false;
+    }
+
 
 
 

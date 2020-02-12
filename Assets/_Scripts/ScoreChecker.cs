@@ -16,6 +16,7 @@ public class ScoreChecker : MonoBehaviour
         {
 
             ScoreManager.Instance.IncreaseScore();
+            ScoreManager.Instance.ScoreTriggered=true;
         }
 
     }

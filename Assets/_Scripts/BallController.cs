@@ -16,12 +16,20 @@ public class BallController : MonoBehaviour
 
     [SerializeField]
     private Transform _ballPosition;
+
+    private PlayerController _playerController;
+    private ScoreManager _scoreManager;
+
+    [SerializeField]
+    private Button _throwButton;
    
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.useGravity = false;
+        _playerController = FindObjectOfType<PlayerController>();
+        _scoreManager = FindObjectOfType<ScoreManager>();
 
     }
 
@@ -31,8 +39,10 @@ public class BallController : MonoBehaviour
         _ballDirection = _basket.position- transform.position;
         if(_isHolding)
         {
+            _rigidbody.useGravity = false;
             transform.position = _ballPosition.position;
         }
+        
       
 
     }
@@ -41,12 +51,38 @@ public class BallController : MonoBehaviour
     public void ThrowButtonClicked()
     {
 
-        _isHolding = false;
-        _rigidbody.useGravity = true;
-        _rigidbody.AddForce(_ballDirection*_throwForce);
+        if (_playerController != null)
+        {
+            _playerController._isThrow = true;
+           
+            _throwButton.interactable = false;
+            StartCoroutine(CallingMissingBall());
+        }
+
+        
 
     }
 
+    public void Throwing()
+    {
+        _isHolding = false;
+        _rigidbody.useGravity = true;
+        _rigidbody.AddForce(_ballDirection * _throwForce);
+        
+    }
+
+    IEnumerator CallingMissingBall()
+    {
+        yield return new WaitForSeconds(10f);
+        _scoreManager.CountingMissingBall();
+        _throwButton.interactable = true;
+    }
+
+
+
+
+
+   
 
 
 

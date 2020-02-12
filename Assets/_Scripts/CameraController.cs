@@ -44,7 +44,7 @@ public class CameraController : MonoBehaviour
             if(_moveMent!=0)
             {
                 _playerController._playerMovement = true;
-                Debug.Log("i am here");
+               
             }
             else
             {
