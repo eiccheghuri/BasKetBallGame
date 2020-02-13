@@ -8,7 +8,7 @@ public class BallController : MonoBehaviour
     public bool _isHolding = true;
     public float _throwForce = 100f;
 
-    public Transform _basket;
+    
 
     private Rigidbody _rigidbody;
 
@@ -22,6 +22,12 @@ public class BallController : MonoBehaviour
 
     [SerializeField]
     private Button _throwButton;
+    [SerializeField]
+    private Transform _mainCamera;
+    [SerializeField]
+    private GameObject _player;
+
+    private CameraController _cameraController;
    
 
     private void Awake()
@@ -30,20 +36,24 @@ public class BallController : MonoBehaviour
         _rigidbody.useGravity = false;
         _playerController = FindObjectOfType<PlayerController>();
         _scoreManager = FindObjectOfType<ScoreManager>();
+        _cameraController = FindObjectOfType<CameraController>();
 
     }
 
     private void LateUpdate()
     {
 
-        _ballDirection = _basket.position- transform.position;
+       
         if(_isHolding)
         {
             _rigidbody.useGravity = false;
             transform.position = _ballPosition.position;
         }
-        
-      
+
+
+       // Debug.Log(_mainCamera.transform.position);
+      //  Debug.Log(_mainCamera.transform.name);
+
 
     }
 
@@ -53,9 +63,11 @@ public class BallController : MonoBehaviour
 
         if (_playerController != null)
         {
+            _cameraController._spawnButtonClicked = false;
             _playerController._isThrow = true;
            
             _throwButton.interactable = false;
+            Throwing();
             StartCoroutine(CallingMissingBall());
         }
 
@@ -67,13 +79,20 @@ public class BallController : MonoBehaviour
     {
         _isHolding = false;
         _rigidbody.useGravity = true;
-        _rigidbody.AddForce(_ballDirection * _throwForce);
         
+        _rigidbody.velocity = Vector3.zero;
+        // _rigidbody.AddForce(_mainCamera.transform.forward * _throwForce,ForceMode.Impulse);
+
+        Vector3 throwDirection = _mainCamera.forward;
+
+        _rigidbody.AddForce(throwDirection*_throwForce);
+
     }
 
     IEnumerator CallingMissingBall()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(8f);
+       
         _scoreManager.CountingMissingBall();
         _throwButton.interactable = true;
     }

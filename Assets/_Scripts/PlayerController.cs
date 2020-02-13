@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public bool _isThrow;
 
-    private Vector3 _StartPosition;
+    private Transform _StartPosition;
     
     
 
@@ -23,18 +23,19 @@ public class PlayerController : MonoBehaviour
         _anim = GetComponent<Animator>();
         _cameraController = FindObjectOfType<CameraController>();
         _ballController = FindObjectOfType<BallController>();
-      
+
+        _StartPosition = transform;
 
     }
 
     private void Update()
     {
 
-        _anim.SetBool("IsMoving",_playerMovement);
-        if(_isThrow)
-        {
-            _anim.SetTrigger("Throw");
-        }
+        //_anim.SetBool("IsMoving",_playerMovement);
+        //if(_isThrow)
+       // {
+           // _anim.SetTrigger("Throw");
+        //}
 
 
     }
@@ -51,7 +52,12 @@ public class PlayerController : MonoBehaviour
        
         _anim.ResetTrigger("Throw");
         _ballController._isHolding = true;
-        _anim.Play("Goalkeeper Idle (1)");
+       // _anim.Play("Goalkeeper Idle (1)");
+        transform.position = _StartPosition.position;
+        transform.rotation = _StartPosition.rotation;
+        _cameraController.ResetGame();
+        
+        
 
 
     }

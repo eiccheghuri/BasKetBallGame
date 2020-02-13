@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    private PlayerController _playerController;
+    public PlayerController _playerController;
     [SerializeField]
     private Transform _cameraPosition;
 
@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour
     public void SpawnButtonClicked()
     {
         _playerController.ResetGame();
+        
+
 
     }
 
